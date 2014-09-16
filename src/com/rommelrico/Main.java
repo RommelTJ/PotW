@@ -10,12 +10,20 @@ public class Main {
         array[3] = 20;
         array[4] = 16;
         array[5] = 18;
-        System.out.println(solve(array));
+        String initialBarrels = "Barrels: {";
+        for (int i=0; i<array.length; i++){
+            if (i==(array.length-1)) {
+                initialBarrels += array[i]+"}";
+            } else {
+                initialBarrels += array[i] + ", ";
+            }
+        }
+        System.out.println(initialBarrels);
+        solve(array);
     }
 
-    private static String solve(int[] barrels) {
+    private static void solve(int[] barrels) {
         for (int i = 0; i < barrels.length; i++) {
-            System.out.println("Beer barrel is " + barrels[i]);
             int totalVolume = 0;
             switch (i) {
                 case 0:
@@ -39,11 +47,32 @@ public class Main {
                 default:
                     break;
             }
-            System.out.println("Total Volume: "+totalVolume);
-            int thirdVolume = totalVolume/3;
-            System.out.println(thirdVolume);
+            if (totalVolume%3==0) {
+                int firstRestaurantVol = totalVolume/3;
+                System.out.println("Beer barrel is " + barrels[i]);
+                findNumbers(barrels, 0, 0, firstRestaurantVol, "");
+                System.out.println("The second restaurant took the remaining barrels");
+                break;
+            }
         }
-        return "Solution not found.";
+    }
+
+    public static String findNumbers(int[] list, int index, int current, int goal, String result)
+    {
+        if (list.length < index || current>goal)
+            return result;
+        for (int i = index; i < list.length; i++) {
+            if (current + list[i] == goal)   {
+                result = "The first restaurant took Barrels: {"+result +", "+list[i]+"}";
+                System.out.println(result);
+
+                return result;
+            }
+            else if (current + list[i] < goal) {
+                findNumbers(list, i + 1, current + list[i], goal, result + list[i]);
+            }
+        }
+        return result;
     }
 
 }
